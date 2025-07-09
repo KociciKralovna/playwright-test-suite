@@ -42,10 +42,11 @@ jobs:
         run: npx playwright install
 
       - name: Run selected test
+        shell: bash
         run: |
           FILE="${{ github.event.inputs.selectedTest }}"
           BROWSER="${{ github.event.inputs.browser }}"
-          
+
           if [ "$FILE" = "rubrika" ]; then
             PATH="tests/specs/rubrika.spec.ts"
           elif [ "$FILE" = "mobile" ]; then
