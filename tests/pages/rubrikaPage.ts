@@ -22,6 +22,7 @@ export class RubrikaPage {
         expect(count).toBe(limit);
     }
 
+    
     async expectArticlesHaveDate() {
         const articles = this.getAllArticles();
         const count = await articles.count();
