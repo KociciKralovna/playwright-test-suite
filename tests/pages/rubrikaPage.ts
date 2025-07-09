@@ -19,7 +19,6 @@ export class RubrikaPage {
 
         const articles = this.getAllArticles();
         const count = await articles.count();
-        console.log(`Na stránce je ${count} článků, očekáváno ${limit}.`);
         expect(count).toBe(limit);
     }
 
