@@ -1,4 +1,4 @@
-name: Run Specific Test
+name: Run Specific Test Sets
 
 on:
   workflow_dispatch:
@@ -24,13 +24,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: npm install --registry=https://registry.npmjs.org/
+        run: npm ci
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v4
@@ -44,17 +45,19 @@ jobs:
       - name: Run selected test
         shell: bash
         run: |
+          export PATH=./node_modules/.bin:$PATH
+
           FILE="${{ github.event.inputs.selectedTest }}"
           BROWSER="${{ github.event.inputs.browser }}"
 
           if [ "$FILE" = "rubrika" ]; then
-            PATH="tests/specs/rubrika.spec.ts"
+            PATH_TO_TEST="tests/specs/rubrika.spec.ts"
           elif [ "$FILE" = "mobile" ]; then
-            PATH="tests/specs/rubrika_mobile.spec.ts"
+            PATH_TO_TEST="tests/specs/rubrika_mobile.spec.ts"
           else
             echo "Neznámý test: $FILE"
             exit 1
           fi
 
-          echo "Spouštím test: $PATH s prohlížečem: $BROWSER"
-          npx playwright test "$PATH" --project="$BROWSER"
+          echo "Spouštím test: $PATH_TO_TEST s prohlížečem: $BROWSER"
+          npx playwright test "$PATH_TO_TEST" --project="$BROWSER"
