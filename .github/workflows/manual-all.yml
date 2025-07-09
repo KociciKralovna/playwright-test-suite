@@ -3,15 +3,13 @@ name: Run All Tests
 on:
   workflow_dispatch:
     inputs:
-      testFile:
-        description: 'Path to test file (např. tests/specs/rubrika.spec.ts)'
-        required: true
       browser:
         description: 'Browser (chromium, firefox, webkit)'
         required: false
+        default: 'chromium'
 
 jobs:
-  run-single:
+  run-all:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,11 +26,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run selected test (chromium)
+      - name: Run all tests
         run: |
           BROWSER="${{ github.event.inputs.browser }}"
-          if [ -z "$BROWSER" ]; then
-            BROWSER="chromium"
-          fi
-          echo "Spouštím test ${{ github.event.inputs.testFile }} s prohlížečem/projektem: $BROWSER"
-          npx playwright test "${{ github.event.inputs.testFile }}" --project="$BROWSER"
+          echo "Spouštím všechny testy s prohlížečem/projektem: $BROWSER"
+          npx playwright test --project="$BROWSER"

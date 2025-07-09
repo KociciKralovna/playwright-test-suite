@@ -1,0 +1,52 @@
+name: Run Specific Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      selectedTest:
+        description: 'Vyber test (rubrika nebo mobile)'
+        required: true
+        default: 'rubrika'
+        type: choice
+        options:
+          - rubrika
+          - mobile
+
+      browser:
+        description: 'Browser (chromium, firefox, webkit)'
+        required: false
+        default: 'chromium'
+
+jobs:
+  run-specific:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install --registry=https://registry.npmjs.org/
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run selected test
+        run: |
+          FILE="${{ github.event.inputs.selectedTest }}"
+          BROWSER="${{ github.event.inputs.browser }}"
+          if [ "$FILE" = "rubrika" ]; then
+            PATH="tests/specs/rubrika.spec.ts"
+          elif [ "$FILE" = "mobile" ]; then
+            PATH="tests/specs/rubrika_mobile.spec.ts"
+          else
+            echo "Neznámý test: $FILE"
+            exit 1
+          fi
+
+          echo "Spouštím test: $PATH s prohlížečem: $BROWSER"
+          npx playwright test "$PATH" --project="$BROWSER"
