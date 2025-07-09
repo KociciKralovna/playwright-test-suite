@@ -3,13 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnKratochvilova-cen69415/playwright-ctsport-tests.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AnKratochvilova-cen69415/playwright-ctsport-tests/issues"
+  },
+  "homepage": "https://github.com/AnKratochvilova-cen69415/playwright-ctsport-tests#readme",
   "devDependencies": {
     "@playwright/test": "^1.53.2",
-    "@types/node": "^24.0.10"
+    "@types/node": "^20.0.0"
   }
 }
