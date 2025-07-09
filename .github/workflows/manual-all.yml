@@ -23,8 +23,14 @@ jobs:
       - name: Install dependencies
         run: npm install --registry=https://registry.npmjs.org/
 
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright
+
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install
 
       - name: Run all tests
         run: |
