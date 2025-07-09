@@ -1,4 +1,4 @@
-name: Run Rubrika Mobile Test
+name: Rubrika Mobile Tests
 
 on:
   workflow_dispatch:

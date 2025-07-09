@@ -1,4 +1,4 @@
-name: Run Rubrika Desktop Test
+name: Rubrika Tests
 
 on:
   workflow_dispatch:

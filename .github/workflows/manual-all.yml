@@ -1,4 +1,4 @@
-name: run-specific-playwright-test
+name: Run All Tests
 
 on:
   workflow_dispatch:
