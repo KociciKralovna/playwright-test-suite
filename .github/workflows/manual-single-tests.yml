@@ -44,6 +44,8 @@ jobs:
 
       - name: Run selected test
         run: |
+          export PATH=./node_modules/.bin:$PATH
+
           FILE="${{ github.event.inputs.selectedTest }}"
           BROWSER="${{ github.event.inputs.browser }}"
 
@@ -58,6 +60,3 @@ jobs:
 
           echo "Spouštím test: $PATH_TO_TEST s prohlížečem: $BROWSER"
           npx playwright test "$PATH_TO_TEST" --project="$BROWSER"
-        shell: bash
-        env:
-          PATH: ./node_modules/.bin:$PATH
