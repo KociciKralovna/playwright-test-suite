@@ -28,10 +28,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run selected test (default browser: chromium)
+      - name: Run selected test (chromium)
         run: |
-          BROWSER=${{ github.event.inputs.browser }}
+          BROWSER="${{ github.event.inputs.browser }}"
           if [ -z "$BROWSER" ]; then
-            BROWSER=chromium
+            BROWSER="chromium"
           fi
-          npx playwright test ${{ github.event.inputs.testFile }} --project=$BROWSER
+          echo "Spouštím test ${{ github.event.inputs.testFile }} s prohlížečem/projektem: $BROWSER"
+          npx playwright test "${{ github.event.inputs.testFile }}" --project="$BROWSER"

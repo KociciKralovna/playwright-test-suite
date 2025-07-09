@@ -1,0 +1,25 @@
+name: Run Rubrika Mobile Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-rubrika-mobile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install --registry=https://registry.npmjs.org/
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run rubrika_mobile.spec.ts (chromium)
+        run: npx playwright test tests/specs/rubrika_mobile.spec.ts --project=chromium
