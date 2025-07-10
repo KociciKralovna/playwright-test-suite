@@ -16,13 +16,13 @@ export class ArticlePage {
         this.relatedFirstLink = page.locator(SELECTORS.RELATED_ARTICLE).first();
     }
     async expectAuthorAndSource() {
-        const authorText = (await this.author.textContent())?.trim() || '';
+        const authorText = (await this.author.textContent())?.trim() || ''; //Povinny Autor - neřeší se existence elementu, rovnou voláme textContect a pri neexistenci padá test
         if (!authorText) {
             throw new Error('Autor článku je prázdný.');
         }
     
         const sourceCount = await this.source.count();
-        const sourceText = sourceCount > 0 ? (await this.source.textContent())?.trim() || '' : '';
+        const sourceText = sourceCount > 0 ? (await this.source.textContent())?.trim() || '' : ''; //Nepovinny Zdroj - count>0 - existuje ten element vůbec? Pokud ne, jen log a test pokračuje
     
         if (!sourceText) {
             console.log('Zdroj článku je prázdný - test pokračuje.');
