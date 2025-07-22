@@ -1,4 +1,6 @@
-# 🎭 Playwright CTSport Tests
+# 🎭 Playwright Tests
+
+Autor: Anna Kratochvílová
 
 Repozitář obsahuje end-to-end automatizované testy pro [sport.ceskatelevize.cz](https://sport.ceskatelevize.cz/) pomocí frameworku **Playwright** v jazyce **TypeScript**.
 
