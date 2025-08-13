@@ -9,10 +9,10 @@ test ('GET /isbn/{isbn} return book details', async () => {
     const expectedTitle = books.hungerGames.expectedTitle;
     const expectedAuthorKey = books.hungerGames.expectedAuthorKey;
 
-    const respons = await context.get('https://openlibrary.org/isbn/{isbn}.json');
-    expect(respons.status()).toBe(200);
-
-    const data = await respons.json();
+    const response = await context.get(`https://openlibrary.org/isbn/${isbn}.json`);
+    expect(response.status()).toBe(200);
+    
+    const data = await response.json();
 
     expect(data.title).toBe(expectedTitle);
     expect(data.publish_date).toBeTruthy;
