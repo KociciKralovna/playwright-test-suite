@@ -6,7 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [['html', { open: 'never', attachments: false }]], // attachments:false → žádný trace.zip
+  reporter: 'html',
   use: {
     trace: 'off',       // vypnout trace
     video: 'off',       
