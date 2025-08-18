@@ -19,3 +19,27 @@ test ('GET /isbn/{isbn} return book details', async () => {
     expect(Array.isArray(data.authors)).toBe(true);
     expect(data.authors[0].key).toBe(expectedAuthorKey);
 });
+
+test ('GET /books/{olid} return book details', async () => {
+    
+    const context = await request.newContext();
+    
+    const olid = books.hungerGames.olid
+    const olidKey = books.hungerGames.olidKey;
+    const expectedTitle = books.hungerGames.expectedTitle;
+    const expectedAuthor = books.hungerGames.expectedAuthorKey;
+    const expectedPublisher = books.hungerGames.expectedPublisher;
+     
+
+    const response = await context.get(`https://openlibrary.org/books/${olid}.json`);
+    expect(response.status()).toBe(200);
+    
+    const data = await response.json();
+
+    expect(data.title).toBe(expectedTitle);
+    expect(data.publishers).toContain(expectedPublisher);
+    expect(data.key).toBe(olidKey);
+    expect(Array.isArray(data.authors)).toBe(true);
+    expect(data.authors[0].key).toBe(expectedAuthor);
+
+});
