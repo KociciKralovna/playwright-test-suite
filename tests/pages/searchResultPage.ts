@@ -1,35 +1,41 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 export class SearchResultsPage {
-    constructor(private page: Page) {}
+  private results: Locator;
+  private nextLink: Locator;
 
-    private results: Locator = this.page.locator(
-        '#searchResults li.searchResultItem, #searchResults li.work, #searchResults li.searchResult'
-      );
-    private nextLink: Locator = this.page.locator('a.ChoosePage[data-ol-link-track*="Next"]');
+  constructor(private readonly page: Page) {
+    this.results = page.locator(
+      '#searchResults li.searchResultItem, #searchResults li.work, #searchResults li.searchResult'
+    );
+    this.nextLink = page.locator('a.ChoosePage[data-ol-link-track*="Next"]');
+  }
 
-    async getResultsCount(): Promise<number> {
-        return await this.results.count();
+  async waitReady() {
+    await this.results.first().waitFor();
+  }
+
+  async getResultsCount(): Promise<number> {
+    return await this.results.count();
+  }
+
+  async validateCardsOnPage() {
+    await expect(this.results.first()).toBeVisible();
+    const cards = await this.results.all();
+    for (const card of cards) {
+      const title = card.locator('.resultTitle a');
+      const author = card.locator('.bookauthor');
+      await expect(title).toHaveText(/.+/);
+      await expect(author).toHaveText(/.+/);
     }
-    async validateCardsOnPage() {
-        const cards = await this.results.all();
-        expect(cards.length).toBeGreaterThan(0);   // musí být alespoň jeden výsledek
-      
-        for (const card of cards) {
-          const title = card.locator('.resultTitle a');   // název knihy
-          const author = card.locator('.bookauthor');     // autor
-      
-          await expect(title).toHaveText(/.+/);           // název nesmí být prázdný
-          await expect(author).toHaveText(/.+/);          // autor nesmí být prázdný
-        
-        }
-    }
-    async goNextIfPossible(): Promise<boolean> {
-        if (await this.nextLink.count() === 0) return false;
-        await Promise.all([
-          this.page.waitForLoadState('domcontentloaded'),
-          this.nextLink.first().click(),
-        ]);
-        return true;
+  }
 
-}}
+  async goNextIfPossible(): Promise<boolean> {
+    if (await this.nextLink.count() === 0) return false;
+    await Promise.all([
+      this.page.waitForLoadState('domcontentloaded'),
+      this.nextLink.first().click(),
+    ]);
+    return true;
+  }
+}
