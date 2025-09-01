@@ -5,9 +5,7 @@ export class SearchResultsPage {
   private nextLink: Locator;
 
   constructor(private readonly page: Page) {
-    this.results = page.locator(
-      '#searchResults li.searchResultItem, #searchResults li.work, #searchResults li.searchResult'
-    );
+    this.results = page.locator('#searchResults li.searchResultItem');
     this.nextLink = page.locator('a.ChoosePage[data-ol-link-track*="Next"]');
   }
 
@@ -24,11 +22,10 @@ export class SearchResultsPage {
     const cards = await this.results.all();
 
     for (const card of cards) {
-      const title = card.locator('.resultTitle a');
-      const authorLink = card.locator(`.bookauthor a[href="${olidKey}"]`);
+      const title = card.locator('h3.booktitle');
+      await expect(title).not.toBeEmpty();
 
-      await expect(title).toHaveText(/.+/);
-
+      const authorLink = card.locator(`.bookauthor a[href^="${olidKey}"]`);
       const count = await authorLink.count();
       expect(count).toBeGreaterThan(0);
     }
