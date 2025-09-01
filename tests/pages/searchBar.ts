@@ -21,7 +21,10 @@ export class SearchBar {
     const suggestion = this.page.locator(`.search-results a[href="${olidKey}"]`);
     await suggestion.first().waitFor({ state: 'visible' });
     await suggestion.first().click();
-    await this.page.waitForURL(olidKey);
+
+    const header = this.page.locator('h1[itemprop="name"]');
+    await expect(header).toHaveText(name);
+  
   }
 }
 

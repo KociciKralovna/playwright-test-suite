@@ -19,14 +19,18 @@ export class SearchResultsPage {
     return await this.results.count();
   }
 
-  async validateCardsOnPage() {
+  async validateCardsOnPage(olidKey: string) {
     await expect(this.results.first()).toBeVisible();
     const cards = await this.results.all();
+
     for (const card of cards) {
       const title = card.locator('.resultTitle a');
-      const author = card.locator('.bookauthor');
+      const authorLink = card.locator(`.bookauthor a[href="${olidKey}"]`);
+
       await expect(title).toHaveText(/.+/);
-      await expect(author).toHaveText(/.+/);
+
+      const count = await authorLink.count();
+      expect(count).toBeGreaterThan(0);
     }
   }
 

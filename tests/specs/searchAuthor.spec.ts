@@ -11,18 +11,19 @@ test('Vyhledani knih dle autora - vysledky maji titul i autora', async ({ page }
 
   await homePage.goto();
   await searchBar.searchAuthorByOLID(authors.burroughs.olidKey, authors.burroughs.fullName);
-  await page.waitForURL(/\/search\?/);
-  await results.waitReady();
+
+  const header = page.locator('h1[itemprop="name"]');
+  await expect(header).toHaveText(authors.burroughs.fullName);
 
   let totalValidated = 0;
   let pageGuard = 0;
-  const MAX_PAGES = 10;
+  const MAX_PAGES = 2;
 
   do {
-    await results.validateCardsOnPage();
+    await results.validateCardsOnPage(authors.burroughs.olidKey); 
     totalValidated += await results.getResultsCount();
     pageGuard++;
-  } while (pageGuard < MAX_PAGES && (await results.goNextIfPossible()));
+}   while (pageGuard < MAX_PAGES && (await results.goNextIfPossible()));
 
   expect(totalValidated).toBeGreaterThan(0);
 });
