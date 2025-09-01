@@ -8,6 +8,7 @@ export const authors = {
       olid: 'OL30256A',
       olidKey: '/authors/OL30256A',
       fullName: 'William S. Burroughs'
+      
     }
   };
   
