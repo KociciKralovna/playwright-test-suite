@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                 // moderní JS
+    "module": "CommonJS",               // modulový systém Node
+    "moduleResolution": "node",         // hledání modulů podle Node
+    "lib": ["ESNext", "DOM"],           // dostupné globální API
+    "types": ["node", "@playwright/test"], // přidá typy pro Node a Playwright
+    "resolveJsonModule": true,          // import JSON souborů
+    "esModuleInterop": true,            // jednodušší importy knihoven
+    "skipLibCheck": true,               // ignoruje type-chyby v node_modules
+    "forceConsistentCasingInFileNames": true, // hlídá názvy souborů
+    "strict": true,                     // zapne přísnou kontrolu typů
+    "noImplicitAny": false              // můžeš psát i bez typů, když nechceš
+  },
+  "include": ["tests/**/*.ts", "pages/**/*.ts", "data/**/*.ts", "utils/**/*.ts"]
+}

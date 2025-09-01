@@ -1,18 +1,20 @@
 {
-  "name": "playwright-ctsport-tests",
+  "name": "playwright-test-suite",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
+  "description": "Obecná Playwright test suite (Chrome/Edge).",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
-    "test:chromium": "npx playwright test --project=chromium",
-    "test:firefox": "npx playwright test --project=firefox",
-    "test:webkit": "npx playwright test --project=webkit"
+    "test": "playwright test",
+    "test:chrome": "playwright test --project=chrome",
+    "test:edge": "playwright test --project=msedge",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.53.2",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.19.11"
   }
 }
