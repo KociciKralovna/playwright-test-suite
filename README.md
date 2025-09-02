@@ -17,6 +17,16 @@ Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API, i
 
 ## 🚀 GitHub Actions
 
-V projektu budou k dispozici **GitHub Actions**:
+V projektu jsou k dispozici **GitHub Actions** pro spouštění  testů:
+
+- Workflow **Playwright Tests** umožňuje:
+  - spouštění všech testů v projektu
+  - volbu konkrétního prohlížeče (`chrome`, `msedge`) – výchozí je `chrome`
+  - spuštění pouze vybraných testů podle tagu (např. `@auth`, `@search`)
+  - automatické cachování Node modulů a Playwright prohlížečů pro rychlejší běh
+
+Spuštění probíhá ručně přes **workflow_dispatch** v GitHubu, kde si lze zvolit vstupy:
+- `browser` – vybere projekt/prohlížeč, na kterém testy poběží
+- `tag` – umožní omezit běh testů jen na testy označené daným tagem 
 
 
