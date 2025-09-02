@@ -1,5 +1,5 @@
 import { test, expect, request } from '@playwright/test';
-import { books } from '../data/books.ts';
+import { books } from '../data/books';
 
 test ('GET /isbn/{isbn} return book details', async () => {
 

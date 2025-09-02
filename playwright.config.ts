@@ -1,4 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export default defineConfig({
   testDir: './tests',
@@ -8,7 +11,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    headless: true,       
+    baseURL: 'https://openlibrary.org/', 
+    headless: true,
     trace: 'off',
     video: 'off',
     screenshot: 'off',
@@ -18,14 +22,14 @@ export default defineConfig({
       name: 'chrome',
       use: {
         ...devices['Desktop Chrome'],
-        channel: 'chrome',   
+        channel: 'chrome',
       },
     },
     {
       name: 'msedge',
       use: {
         ...devices['Desktop Edge'],
-        channel: 'msedge',   
+        channel: 'msedge',
       },
     },
   ],
