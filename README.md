@@ -3,7 +3,7 @@
 👩‍💻 Autor: Anna Kratochvílová
 
 Repozitář obsahuje automatizované testy psané v Playwrightu (TypeScript).
-Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API, integrační testy (kombinace API + UI) i end-to-end scénáře.
+Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API a end-to-end scénáře.
 
 ## 📁 Struktura
 
