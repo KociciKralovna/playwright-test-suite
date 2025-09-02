@@ -5,6 +5,11 @@
 Repozitář obsahuje automatizované testy psané v Playwrightu (TypeScript).
 Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API a end-to-end scénáře.
 
+## Poznámka
+
+Projekt je stále ve vývoji. Struktura testů se může rozšiřovat a některé části (např. integrační testy) zatím nejsou hotové.  
+Postupně se budou doplňovat nové scénáře, data a utility.
+
 ## 📁 Struktura
 
 - `tests/api/` – REST API testy 
@@ -13,7 +18,6 @@ Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API a 
 - `tests/pages/` – Page Objecty 
 - `tests/data/` – testovací data a konstanty 
 - `tests/utils/` – pomocné utility a validace 
-- `tests/locators/` – selektory a lokátory pro jednotlivé elementy
 
 ## 🚀 GitHub Actions
 
