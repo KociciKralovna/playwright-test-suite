@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '/../../.env' });
 
 
-test('@search Vyhledání knih dle autora - výsledky mají titul i autora', async ({ page }) => {
+test('@search Search books by author - results have title and author', async ({ page }) => {
   const homePage = new HomePage(page);
   const results = new SearchResultsPage(page);
 
@@ -34,7 +34,7 @@ test('@search Vyhledání knih dle autora - výsledky mají titul i autora', asy
   expect(totalValidated).toBeGreaterThan(0);
 });
 
-test('@auth Login a Logout', async ({ page }) => {
+test('@auth Login and Logout', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await page.goto('/');

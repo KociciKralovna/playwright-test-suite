@@ -15,7 +15,7 @@ test ('GET /isbn/{isbn} return book details', async () => {
     const data = await response.json();
 
     expect(data.title).toBe(expectedTitle);
-    expect(data.publish_date).toBeTruthy;
+    expect(data.publish_date).toBeTruthy();
     expect(Array.isArray(data.authors)).toBe(true);
     expect(data.authors[0].key).toBe(expectedAuthorKey);
 });
