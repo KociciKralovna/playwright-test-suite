@@ -5,7 +5,10 @@
   "description": "Obecná Playwright test suite (Chrome/Edge).",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test",
+    "test:pw": "playwright test",
+    "test:pw:ui": "playwright test --ui",
+    "test:vitest": "vitest run",
+    "test:vitest:watch": "vitest",
     "test:chrome": "playwright test --project=chrome",
     "test:edge": "playwright test --project=msedge",
     "report": "playwright show-report",
@@ -16,6 +19,9 @@
   "devDependencies": {
     "@playwright/test": "^1.53.2",
     "@types/node": "^20.19.11",
-    "dotenv": "^17.2.1"
+    "dotenv": "^17.2.1",
+    "vite": "^7.1.5",
+    "vite-node": "^3.2.4",
+    "vitest": "^3.2.4"
   }
 }
