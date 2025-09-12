@@ -3,12 +3,16 @@ name: Playwright Tests
 on:
   workflow_dispatch:
     inputs:
+      folder:
+        description: 'Folder with tests (specs or api)'
+        required: true
+        default: ''
       browser:
         description: 'Browser project (chrome, msedge)'
         required: false
         default: 'chrome'
       tag:
-        description: 'Run only tests with given @tag (leave empty for all tests)'
+        description: 'Run only tests with given @tag'
         required: false
         default: ''
 
@@ -69,7 +73,7 @@ jobs:
           name: Playwright Tests
           path: test-results/results.xml
           reporter: jest-junit
-          only-summary: true   # žádný PR koment, jen Summary v Actions
+          only-summary: true 
 
       - name: Upload Playwright HTML Report
         if: always()
