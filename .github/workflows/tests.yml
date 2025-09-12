@@ -1,24 +1,32 @@
-name: Playwright Tests
+name: Manual Run
 
 on:
   workflow_dispatch:
     inputs:
       folder:
-        description: 'Folder with tests (specs or api)'
+        description: 'Select which tests to run (specs, api)'
         required: true
         default: ''
+        type: choice
+        options:
+          - specs
+          - api
       browser:
         description: 'Browser project (chrome, msedge)'
         required: false
         default: 'chrome'
       tag:
-        description: 'Run only tests with given @tag'
+        description: 'Run only tests with given @tag (leave empty for all tests)'
         required: false
         default: ''
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
     env:
       OPENLIB_EMAIL: ${{ secrets.OPENLIB_EMAIL }}
       OPENLIB_PASSWORD: ${{ secrets.OPENLIB_PASSWORD }}
@@ -55,15 +63,16 @@ jobs:
 
       - name: Run Playwright Tests
         run: |
+          FOLDER="${{ github.event.inputs.folder }}"
           BROWSER="${{ github.event.inputs.browser }}"
           TAG="${{ github.event.inputs.tag }}"
 
           if [ -z "$TAG" ]; then
-            echo "Running all tests in $BROWSER"
-            npx playwright test --project="$BROWSER"
+            echo "Running all tests in $FOLDER with $BROWSER"
+            npx playwright test "tests/$FOLDER" --project="$BROWSER"
           else
-            echo "Running tests in $BROWSER with tag $TAG"
-            npx playwright test --project="$BROWSER" --grep "$TAG"
+            echo "Running tests in $FOLDER with $BROWSER and tag $TAG"
+            npx playwright test "tests/$FOLDER" --project="$BROWSER" --grep "$TAG"
           fi
 
       - name: Report results in GitHub Summary
@@ -73,7 +82,8 @@ jobs:
           name: Playwright Tests
           path: test-results/results.xml
           reporter: jest-junit
-          only-summary: true 
+          only-summary: true
+          list-tests: all
 
       - name: Upload Playwright HTML Report
         if: always()
