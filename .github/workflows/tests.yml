@@ -15,6 +15,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      OPENLIB_EMAIL: ${{ secrets.OPENLIB_EMAIL }}
+      OPENLIB_PASSWORD: ${{ secrets.OPENLIB_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v4
@@ -50,11 +53,26 @@ jobs:
         run: |
           BROWSER="${{ github.event.inputs.browser }}"
           TAG="${{ github.event.inputs.tag }}"
-          
+
           if [ -z "$TAG" ]; then
             echo "Running all tests in $BROWSER"
-            npx playwright test --project="$BROWSER"
+            npx playwright test --project="$BROWSER" --reporter=html,junit --output=test-results
           else
             echo "Running tests in $BROWSER with tag $TAG"
-            npx playwright test --project="$BROWSER" --grep "$TAG"
+            npx playwright test --project="$BROWSER" --grep "$TAG" --reporter=html,junit --output=test-results
           fi
+
+      - name: Report results in GitHub Summary
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Playwright Tests
+          path: test-results/*.xml
+          reporter: jest-junit
+
+      - name: Upload Playwright HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
