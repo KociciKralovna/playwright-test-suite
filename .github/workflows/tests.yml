@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       folder:
-        description: 'Select which tests to run (specs, api)'
+        description: 'Select which tests to run (all, specs, api)'
         required: true
         default: 'all'
         type: choice
@@ -64,6 +64,7 @@ jobs:
 
       - name: Run Playwright Tests
         run: |
+          mkdir -p test-results
           FOLDER="${{ github.event.inputs.folder }}"
           BROWSER="${{ github.event.inputs.browser }}"
           TAG="${{ github.event.inputs.tag }}"
@@ -75,11 +76,11 @@ jobs:
           fi
           
           if [ -z "$TAG" ]; then
-            echo "Running all tests in $FOLDER with $BROWSER"
-            npx playwright test "tests/$FOLDER" --project="$BROWSER"
+            echo "Running all tests in $TARGET with $BROWSER"
+            npx playwright test "$TARGET" --project="$BROWSER"
           else
-            echo "Running tests in $FOLDER with $BROWSER and tag $TAG"
-            npx playwright test "tests/$FOLDER" --project="$BROWSER" --grep "$TAG"
+            echo "Running tests in $TARGET with $BROWSER and tag $TAG"
+            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
 
       - name: Report results in GitHub Summary
