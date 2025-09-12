@@ -56,13 +56,13 @@ jobs:
 
           if [ -z "$TAG" ]; then
             echo "Running all tests in $BROWSER"
-            npx playwright test --project="$BROWSER" --reporter=html,junit --reporter=junit --reporter-options outputFile=test-results/results.xml
+            npx playwright test --project="$BROWSER"
           else
             echo "Running tests in $BROWSER with tag $TAG"
-            npx playwright test --project="$BROWSER" --grep "$TAG" --reporter=html,junit --reporter=junit --reporter-options outputFile=test-results/results.xml
+            npx playwright test --project="$BROWSER" --grep "$TAG"
           fi
 
-      - name: Report results in GitHub Summary
+      - name: Report results in GitHub Summary + PR
         if: always()
         uses: dorny/test-reporter@v1
         with:
@@ -77,3 +77,10 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
+
+      - name: Upload traces and videos on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: test-results
