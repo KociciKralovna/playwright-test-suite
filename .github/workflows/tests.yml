@@ -6,9 +6,10 @@ on:
       folder:
         description: 'Select which tests to run (specs, api)'
         required: true
-        default: ''
+        default: 'all'
         type: choice
         options:
+          - all
           - specs
           - api
       browser:
@@ -67,6 +68,12 @@ jobs:
           BROWSER="${{ github.event.inputs.browser }}"
           TAG="${{ github.event.inputs.tag }}"
 
+          if [ "$FOLDER" = "all" ]; then
+            TARGET="tests"
+          else
+            TARGET="tests/$FOLDER"
+          fi
+          
           if [ -z "$TAG" ]; then
             echo "Running all tests in $FOLDER with $BROWSER"
             npx playwright test "tests/$FOLDER" --project="$BROWSER"
