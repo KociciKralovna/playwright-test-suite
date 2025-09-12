@@ -3,7 +3,12 @@
 👩‍💻 Autor: Anna Kratochvílová
 
 Repozitář obsahuje automatizované testy psané v Playwrightu (TypeScript).
-Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API, integrační testy (kombinace API + UI) i end-to-end scénáře.
+Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API a end-to-end scénáře.
+
+## Poznámka
+
+Projekt je stále ve vývoji. Struktura testů se může rozšiřovat a některé části (např. integrační testy) zatím nejsou hotové.  
+Postupně se budou doplňovat nové scénáře, data a utility.
 
 ## 📁 Struktura
 
@@ -13,10 +18,19 @@ Projekt je zaměřený na testování OpenLibrary – zahrnuje testy REST API, i
 - `tests/pages/` – Page Objecty 
 - `tests/data/` – testovací data a konstanty 
 - `tests/utils/` – pomocné utility a validace 
-- `tests/locators/` – selektory a lokátory pro jednotlivé elementy
 
 ## 🚀 GitHub Actions
 
-V projektu budou k dispozici **GitHub Actions**:
+V projektu jsou k dispozici **GitHub Actions** pro spouštění  testů:
+
+- Workflow **Playwright Tests** umožňuje:
+  - spouštění všech testů v projektu
+  - volbu konkrétního prohlížeče (`chrome`, `msedge`) – výchozí je `chrome`
+  - spuštění pouze vybraných testů podle tagu (např. `@auth`, `@search`)
+  - automatické cachování Node modulů a Playwright prohlížečů pro rychlejší běh
+
+Spuštění probíhá ručně přes **workflow_dispatch** v GitHubu, kde si lze zvolit vstupy:
+- `browser` – vybere projekt/prohlížeč, na kterém testy poběží
+- `tag` – umožní omezit běh testů jen na testy označené daným tagem 
 
 
