@@ -62,14 +62,14 @@ jobs:
             npx playwright test --project="$BROWSER" --grep "$TAG"
           fi
 
-      - name: Report results in GitHub Summary + PR
+      - name: Report results in GitHub Summary
         if: always()
         uses: dorny/test-reporter@v1
         with:
           name: Playwright Tests
           path: test-results/results.xml
           reporter: jest-junit
-          only-summary: false
+          only-summary: true   # žádný PR koment, jen Summary v Actions
 
       - name: Upload Playwright HTML Report
         if: always()
