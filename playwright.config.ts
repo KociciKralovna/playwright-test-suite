@@ -9,13 +9,17 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report' }],
+    ['junit', { outputFile: 'test-results/results.xml' }]
+  ],
   use: {
     baseURL: 'https://openlibrary.org/', 
     headless: true,
-    trace: 'off',
-    video: 'off',
-    screenshot: 'off',
+    trace: 'retain-on-failure',   
+    video: 'retain-on-failure',  
+    screenshot: 'only-on-failure'
   },
   projects: [
     {
