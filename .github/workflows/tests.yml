@@ -83,15 +83,15 @@ jobs:
             npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
 
-      - name: Report results in GitHub Summary
+      - name: Add results to GitHub Summary
         if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Playwright Tests
-          path: test-results/results.xml
-          reporter: jest-junit
-          only-summary: true
-          list-tests: all
+        run: |
+          echo "## Playwright Test Results" >> $GITHUB_STEP_SUMMARY
+          if [ -f test-results/results.xml ]; then
+            npx junit-viewer --results=test-results/results.xml --summary >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No JUnit results found." >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Upload Playwright HTML Report
         if: always()
