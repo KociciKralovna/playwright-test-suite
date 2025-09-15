@@ -12,14 +12,14 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: 'playwright-report' }],
-    ['junit', { outputFile: 'test-results/results.xml' }]
+    ['junit', { outputFile: 'test-results/results.xml' }],
   ],
   use: {
-    baseURL: 'https://openlibrary.org/', 
+    baseURL: 'https://openlibrary.org/',
     headless: true,
-    trace: 'retain-on-failure',   
-    video: 'retain-on-failure',  
-    screenshot: 'only-on-failure'
+    trace: 'off',
+    video: 'off',
+    screenshot: 'off',
   },
   projects: [
     {
