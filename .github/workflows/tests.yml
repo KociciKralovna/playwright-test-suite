@@ -28,17 +28,12 @@ jobs:
       contents: read
       checks: write
 
-    env:
-      OPENLIB_EMAIL: ${{ secrets.OPENLIB_EMAIL }}
-      OPENLIB_PASSWORD: ${{ secrets.OPENLIB_PASSWORD }}
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -51,7 +46,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm ci --registry=https://registry.npmjs.org/
+        run: npm ci
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v4
@@ -76,20 +71,20 @@ jobs:
           fi
           
           if [ -z "$TAG" ]; then
-            echo "Running all tests in $TARGET with $BROWSER"
-            npx playwright test "$TARGET" --project="$BROWSER" --reporter=html,junit --output=test-results
+            npx playwright test "$TARGET" --project="$BROWSER"
           else
-            echo "Running tests in $TARGET with $BROWSER and tag $TAG"
-            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG" --reporter=html,junit --output=test-results
+            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
 
       - name: Report results in GitHub Summary
         if: always()
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: 'test-results/*.xml'
+          report_paths: "test-results/results.xml"
           require_tests: true
-          check_name: 'Playwright Tests'
+          check_name: "Playwright Tests"
+          job_summary: true
+          detailed_summary: true
 
       - name: Upload Playwright HTML Report
         if: always()
