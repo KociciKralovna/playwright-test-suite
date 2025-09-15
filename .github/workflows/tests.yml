@@ -77,21 +77,19 @@ jobs:
           
           if [ -z "$TAG" ]; then
             echo "Running all tests in $TARGET with $BROWSER"
-            npx playwright test "$TARGET" --project="$BROWSER"
+            npx playwright test "$TARGET" --project="$BROWSER" --reporter=html,junit --output=test-results
           else
             echo "Running tests in $TARGET with $BROWSER and tag $TAG"
-            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
+            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG" --reporter=html,junit --output=test-results
           fi
 
-      - name: Add results to GitHub Summary
+      - name: Report results in GitHub Summary
         if: always()
-        run: |
-          echo "## Playwright Test Results" >> $GITHUB_STEP_SUMMARY
-          if [ -f test-results/results.xml ]; then
-            npx junit-viewer --results=test-results/results.xml --summary >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No JUnit results found." >> $GITHUB_STEP_SUMMARY
-          fi
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'test-results/*.xml'
+          require_tests: true
+          check_name: 'Playwright Tests'
 
       - name: Upload Playwright HTML Report
         if: always()
