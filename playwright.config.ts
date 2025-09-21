@@ -13,7 +13,13 @@ export default defineConfig({
     ['list'],
     ['html', { outputFolder: 'playwright-report' }],
     ['junit', { outputFile: 'test-results/results.xml' }],
-    ['json', { outputFile: 'test-results/results.json' }]
+    ['@estruyf/github-actions-reporter', {
+      useDetails: true,
+      showError: true,
+      showSkipped: true,
+      showDuration: true,
+      title: 'OpenLibrary Test Results'
+  }]
 ],
   use: {
     baseURL: 'https://openlibrary.org/',

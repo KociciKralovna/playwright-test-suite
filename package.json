@@ -24,5 +24,8 @@
     "vite": "^7.1.5",
     "vite-node": "^3.2.4",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@estruyf/github-actions-reporter": "^1.10.0"
   }
 }
