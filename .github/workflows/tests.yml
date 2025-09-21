@@ -91,7 +91,6 @@ jobs:
             total_failed=0
             total_skipped=0
 
-            # iterace přes test suite
             while read -r line; do
               tests=$(echo "$line" | awk -F'"' '{print $10}')
               failures=$(echo "$line" | awk -F'"' '{print $12}')
