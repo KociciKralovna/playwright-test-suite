@@ -13,9 +13,9 @@ on:
           - specs
           - api
       browser:
-        description: 'Browser project (chrome, msedge)'
+        description: 'Browser project (chromium, firefox, webkit, all)'
         required: false
-        default: 'chrome'
+        default: 'chromium'
       tag:
         description: 'Run only tests with given @tag (leave empty for all tests)'
         required: false
@@ -25,10 +25,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.47.0-focal
-    
-    permissions:
-      contents: read
-      checks: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ${{ fromJSON(github.event.inputs.browser == 'all' && '["chromium","firefox","webkit"]' || format('["{0}"]', github.event.inputs.browser)) }}
 
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +55,6 @@ jobs:
         run: |
           mkdir -p test-results
           FOLDER="${{ github.event.inputs.folder }}"
-          BROWSER="${{ github.event.inputs.browser }}"
           TAG="${{ github.event.inputs.tag }}"
 
           if [ "$FOLDER" = "all" ]; then
@@ -64,11 +64,11 @@ jobs:
           fi
           
           if [ -z "$TAG" ]; then
-            echo "Running all tests in $TARGET with $BROWSER"
-            npx playwright test "$TARGET" --project="$BROWSER"
+            echo "Running all tests in $TARGET with ${{ matrix.browser }}"
+            npx playwright test "$TARGET" --project="${{ matrix.browser }}"
           else
-            echo "Running tests in $TARGET with $BROWSER and tag $TAG"
-            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
+            echo "Running tests in $TARGET with ${{ matrix.browser }} and tag $TAG"
+            npx playwright test "$TARGET" --project="${{ matrix.browser }}" --grep "$TAG"
           fi
         env:
           OPENLIB_EMAIL: ${{ secrets.OPENLIB_EMAIL }}
@@ -78,12 +78,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report
 
       - name: Upload traces and videos on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-artifacts
+          name: playwright-artifacts-${{ matrix.browser }}
           path: test-results

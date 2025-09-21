@@ -19,29 +19,27 @@ export default defineConfig({
       showSkipped: true,
       showDuration: true,
       title: 'OpenLibrary Test Results'
-  }]
-],
+    }]
+  ],
   use: {
     baseURL: 'https://openlibrary.org/',
     headless: true,
-    trace: 'retain-on-failure',   
-    video: 'retain-on-failure',    
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
   projects: [
     {
-      name: 'chrome',
-      use: {
-        ...devices['Desktop Chrome'],
-        channel: 'chrome',
-      },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'msedge',
-      use: {
-        ...devices['Desktop Edge'],
-        channel: 'msedge',
-      },
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
 });
