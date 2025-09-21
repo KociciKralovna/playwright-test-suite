@@ -30,7 +30,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.55.0-focal
+    container: mcr.microsoft.com/playwright:v1.55.0
 
     strategy:
       fail-fast: false
