@@ -62,6 +62,9 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright Tests
+        env:
+          OPENLIB_EMAIL: ${{ secrets.OPENLIB_EMAIL }}
+          OPENLIB_PASSWORD: ${{ secrets.OPENLIB_PASSWORD }}
         run: |
           mkdir -p test-results
           FOLDER="${{ github.event.inputs.folder }}"
@@ -76,10 +79,10 @@ jobs:
           
           if [ -z "$TAG" ]; then
             echo "Running all tests in $TARGET with $BROWSER"
-            npx playwright test "$TARGET" --project="$BROWSER"
+            npx playwright test "$TARGET" --project="$BROWSER" --reporter=html,junit --reporter-options outputFile=test-results/results.xml
           else
             echo "Running tests in $TARGET with $BROWSER and tag $TAG"
-            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
+            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG" --reporter=html,junit --reporter-options outputFile=test-results/results.xml
           fi
 
       - name: Add summary (total + by file)
