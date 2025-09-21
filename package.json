@@ -2,7 +2,7 @@
   "name": "playwright-test-suite",
   "version": "1.0.0",
   "private": true,
-  "description": "Obecná Playwright test suite (Chrome/Edge).",
+  "description": "Obecná Playwright test suite",
   "main": "index.js",
   "scripts": {
     "test:pw": "playwright test",
