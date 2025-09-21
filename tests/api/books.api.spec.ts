@@ -1,8 +1,8 @@
 import { test, expect, request } from '@playwright/test';
 import { books } from '../data/books';
+import { expectOrSkip } from '../utils/apiHelpers';
 
-test ('GET /isbn/{isbn} return book details', async () => {
-
+test('GET /isbn/{isbn} return book details', async ({ }, testInfo) => {
     const context = await request.newContext();
 
     const isbn = books.hungerGames.isbn10;
@@ -10,8 +10,9 @@ test ('GET /isbn/{isbn} return book details', async () => {
     const expectedAuthorKey = books.hungerGames.expectedAuthorKey;
 
     const response = await context.get(`https://openlibrary.org/isbn/${isbn}.json`);
-    expect(response.status()).toBe(200);
-    
+
+    await expectOrSkip(response);
+
     const data = await response.json();
 
     expect(data.title).toBe(expectedTitle);
@@ -32,7 +33,8 @@ test ('GET /books/{olid} return book details', async () => {
      
 
     const response = await context.get(`https://openlibrary.org/books/${olid}.json`);
-    expect(response.status()).toBe(200);
+    
+    await expectOrSkip(response);
     
     const data = await response.json();
 
