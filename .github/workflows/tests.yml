@@ -28,10 +28,6 @@ jobs:
       contents: read
       checks: write
 
-    env:
-      OPENLIB_EMAIL: ${{ secrets.OPENLIB_EMAIL }}
-      OPENLIB_PASSWORD: ${{ secrets.OPENLIB_PASSWORD }}
-
     steps:
       - uses: actions/checkout@v4
 
@@ -50,7 +46,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm ci --registry=https://registry.npmjs.org/
+        run: npm ci
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v4
@@ -82,52 +78,11 @@ jobs:
             npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
 
-      - name: Install xmllint
-        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
-
-      - name: Add summary (total + by file)
+      - name: Report to GitHub Summary
         if: always()
-        run: |
-          echo "## OpenLibrary Test Results" >> $GITHUB_STEP_SUMMARY
-          if [ -f test-results/results.xml ]; then
-            total_passed=0
-            total_failed=0
-            total_skipped=0
-
-            while read -r line; do
-              tests=$(echo "$line" | awk -F'"' '{print $10}')
-              failures=$(echo "$line" | awk -F'"' '{print $12}')
-              skipped=$(echo "$line" | awk -F'"' '{print $14}')
-              passed=$((tests - failures - skipped))
-
-              total_passed=$((total_passed + passed))
-              total_failed=$((total_failed + failures))
-              total_skipped=$((total_skipped + skipped))
-            done < <(xmllint --xpath "//testsuite" test-results/results.xml | grep "<testsuite")
-
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Total Results**" >> $GITHUB_STEP_SUMMARY
-            echo "- Passed: $total_passed" >> $GITHUB_STEP_SUMMARY
-            echo "- Failed: $total_failed" >> $GITHUB_STEP_SUMMARY
-            echo "- Skipped: $total_skipped" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            echo "**Results by File**" >> $GITHUB_STEP_SUMMARY
-            echo "| File | Passed | Failed | Skipped |" >> $GITHUB_STEP_SUMMARY
-            echo "|------|--------|--------|---------|" >> $GITHUB_STEP_SUMMARY
-
-            while read -r line; do
-              file=$(echo "$line" | awk -F'"' '{print $2}')
-              tests=$(echo "$line" | awk -F'"' '{print $10}')
-              failures=$(echo "$line" | awk -F'"' '{print $12}')
-              skipped=$(echo "$line" | awk -F'"' '{print $14}')
-              passed=$((tests - failures - skipped))
-              echo "| $file | $passed | $failures | $skipped |" >> $GITHUB_STEP_SUMMARY
-            done < <(xmllint --xpath "//testsuite" test-results/results.xml | grep "<testsuite")
-
-          else
-            echo "No JUnit results found." >> $GITHUB_STEP_SUMMARY
-          fi
+        uses: estruyf/playwright-github-actions-reporter@v2
+        with:
+          json-path: test-results/results.json
 
       - name: Upload Playwright HTML Report
         if: always()
