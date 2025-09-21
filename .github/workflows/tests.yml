@@ -76,10 +76,10 @@ jobs:
           
           if [ -z "$TAG" ]; then
             echo "Running all tests in $TARGET with $BROWSER"
-            npx playwright test "$TARGET" --project="$BROWSER" --reporter=html,junit --reporter-options outputFile=test-results/results.xml
+            npx playwright test "$TARGET" --project="$BROWSER"
           else
             echo "Running tests in $TARGET with $BROWSER and tag $TAG"
-            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG" --reporter=html,junit --reporter-options outputFile=test-results/results.xml
+            npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
 
       - name: Add summary (total + by file)
