@@ -16,6 +16,12 @@ on:
         description: 'Browser project (chromium, firefox, webkit, all)'
         required: false
         default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+          - all
       tag:
         description: 'Run only tests with given @tag (leave empty for all tests)'
         required: false
