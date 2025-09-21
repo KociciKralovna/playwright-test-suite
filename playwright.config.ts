@@ -12,8 +12,9 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: 'playwright-report' }],
-    ['junit', { outputFile: 'test-results/results.xml' }]
-  ],
+    ['junit', { outputFile: 'test-results/results.xml' }],
+    ['json', { outputFile: 'test-results/results.json' }]
+],
   use: {
     baseURL: 'https://openlibrary.org/',
     headless: true,
