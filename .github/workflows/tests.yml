@@ -82,6 +82,9 @@ jobs:
             npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
 
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
       - name: Add summary (total + by file)
         if: always()
         run: |
