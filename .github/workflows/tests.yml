@@ -55,7 +55,7 @@ jobs:
           key: ${{ runner.os }}-playwright
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps --only-shell
 
       - name: Run Playwright Tests
         run: |
@@ -77,12 +77,6 @@ jobs:
             echo "Running tests in $TARGET with $BROWSER and tag $TAG"
             npx playwright test "$TARGET" --project="$BROWSER" --grep "$TAG"
           fi
-
-      - name: Report to GitHub Summary
-        if: always()
-        uses: estruyf/playwright-github-actions-reporter@v2
-        with:
-          json-path: test-results/results.json
 
       - name: Upload Playwright HTML Report
         if: always()

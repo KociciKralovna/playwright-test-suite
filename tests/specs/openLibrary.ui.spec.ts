@@ -3,8 +3,6 @@ import { HomePage } from '../pages/homePage';
 import { SearchResultsPage } from '../pages/searchResultPage';
 import { LoginPage } from '../pages/loginPage';
 import { authors } from '../data/authors';
-import * as dotenv from 'dotenv';
-dotenv.config({ path: __dirname + '/../../.env' });
 
 
 test('@search Search books by author - results have title and author', async ({ page }) => {
@@ -39,9 +37,13 @@ test('@auth Login and Logout', async ({ page }) => {
 
   await page.goto('/');
   await loginPage.gotoLogin();
+  
+  if (!process.env.OPENLIB_EMAIL || !process.env.OPENLIB_PASSWORD) {
+  throw new Error('Missing OPENLIB_EMAIL or OPENLIB_PASSWORD');
+}
   await loginPage.login(
-    process.env.OPENLIB_EMAIL as string,
-    process.env.OPENLIB_PASSWORD as string
+    process.env.OPENLIB_EMAIL!,
+    process.env.OPENLIB_PASSWORD!
   );
   await expect(page.getByRole('heading', { level: 2 })).toContainText['Welcome to Open Library']
   await loginPage.logout();
