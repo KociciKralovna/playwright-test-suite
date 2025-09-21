@@ -42,8 +42,8 @@ test('@auth Login and Logout', async ({ page }) => {
   throw new Error('Missing OPENLIB_EMAIL or OPENLIB_PASSWORD');
 }
   await loginPage.login(
-    process.env.OPENLIB_EMAIL!,
-    process.env.OPENLIB_PASSWORD!
+    process.env.OPENLIB_EMAIL,
+    process.env.OPENLIB_PASSWORD
   );
   await expect(page.getByRole('heading', { level: 2 })).toContainText['Welcome to Open Library']
   await loginPage.logout();
