@@ -27,7 +27,6 @@ V projektu jsou k dispozici GitHub Actions pro spouštění testů.
 - spuštění všech testů v projektu  
 - volbu konkrétního prohlížeče (`chromium`, `firefox`, `webkit`, `all`) – výchozí je `chromium`  
 - spuštění pouze vybraných testů podle tagu (např. `@auth`, `@search`)  
-- automatické cachování Node modulů a Playwright prohlížečů pro rychlejší běh  
 
 ### Jak spustit:
 1. V GitHubu přejdi do **Actions** → vyber workflow **Manual Run**.  
@@ -45,7 +44,3 @@ Po dokončení běhu workflow se v GitHub Actions zobrazí **souhrn výsledků t
 - výsledky jsou seskupené po testovacích souborech  
 - pro každý test je dostupný detail (status, délka běhu, tagy, případná chyba)  
 - generuje se **Playwright HTML report** – dostupný jako artifact ke stažení
-
-
-
-
