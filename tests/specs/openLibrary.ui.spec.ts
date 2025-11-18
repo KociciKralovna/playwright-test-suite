@@ -34,18 +34,19 @@ test('@search Search books by author - results have title and author', async ({ 
 
 test('@auth Login and Logout', async ({ page }) => {
   const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
 
-  await page.goto('/');
+  await homePage.goto();
   await loginPage.gotoLogin();
   
   if (!process.env.OPENLIB_EMAIL || !process.env.OPENLIB_PASSWORD) {
-  throw new Error('Missing OPENLIB_EMAIL or OPENLIB_PASSWORD');
-}
+    throw new Error('Missing OPENLIB_EMAIL or OPENLIB_PASSWORD');
+  }
   await loginPage.login(
     process.env.OPENLIB_EMAIL,
     process.env.OPENLIB_PASSWORD
   );
-  await expect(page.getByRole('heading', { level: 2 })).toContainText['Welcome to Open Library']
+  await expect(page.getByRole('heading', { name: 'Welcome to Open Library' })).toBeVisible();
   await loginPage.logout();
-  await expect(page.getByRole('link', { name: 'Log In' })).toBeVisible();
+  await expect(loginPage.getLoginLinkLocator()).toBeVisible();
 });
