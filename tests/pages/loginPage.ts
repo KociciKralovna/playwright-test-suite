@@ -1,21 +1,45 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class LoginPage {
-  constructor(private readonly page: Page) {}
+  private readonly loginLink: Locator;
+  private readonly usernameInput: Locator;
+  private readonly passwordInput: Locator;
+  private readonly loginSubmitButton: Locator;
+  private readonly myAccountMenu: Locator;
+  private readonly logoutButton: Locator;
+  private readonly errorMessage: Locator;
+
+  constructor(private readonly page: Page) {
+    this.loginLink = page.getByRole('link', { name: 'Log In' });
+    this.usernameInput = page.locator('#username');
+    this.passwordInput = page.locator('#password');
+    this.loginSubmitButton = page.locator('form[name="login"] button[type="submit"]');
+    this.myAccountMenu = page.getByAltText('My account');
+    this.logoutButton = page.getByRole('button', { name: /Odhlásit|Log out/i });
+    this.errorMessage = page.locator('div.error.ol-signup-form__info-box');
+  }
 
   async gotoLogin() {
-    await this.page.getByRole('link', { name: 'Log In' }).click();
+    await this.loginLink.click();
   }
 
   async login(email: string, password: string) {
-    await this.page.locator('form[name="login"] button[type="submit"]').waitFor();
-    await this.page.locator('#username').fill(email);
-    await this.page.locator('#password').fill(password);
-    await this.page.locator('form[name="login"] button[type="submit"]').click();
+    await this.loginSubmitButton.waitFor();
+    await this.usernameInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginSubmitButton.click();
   }
 
   async logout() {
-    await this.page.getByAltText('My account').click();
-    await this.page.getByRole('button', { name: /Odhlásit|Log out/i }).click();
+    await this.myAccountMenu.click();
+    await this.logoutButton.click();
+  }
+
+  getLoginLinkLocator(): Locator {
+    return this.loginLink;
+  }
+
+  getErrorMessageLocator(): Locator {
+    return this.errorMessage;
   }
 }

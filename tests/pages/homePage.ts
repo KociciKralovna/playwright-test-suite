@@ -15,7 +15,7 @@ export class HomePage {
     await this.page.goto('https://openlibrary.org/');
   }
 
-  async search(filter: 'author' | 'title' | 'subject', value: string) {
+  async search(filter: 'q' | 'author' | 'title' | 'subject', value: string) {
     await this.searchBy.selectOption(filter);
     await this.searchInput.fill(value);
   }
