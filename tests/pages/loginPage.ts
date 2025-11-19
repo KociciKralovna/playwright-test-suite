@@ -7,6 +7,7 @@ export class LoginPage {
   private readonly loginSubmitButton: Locator;
   private readonly myAccountMenu: Locator;
   private readonly logoutButton: Locator;
+  private readonly errorMessage: Locator;
 
   constructor(private readonly page: Page) {
     this.loginLink = page.getByRole('link', { name: 'Log In' });
@@ -15,6 +16,7 @@ export class LoginPage {
     this.loginSubmitButton = page.locator('form[name="login"] button[type="submit"]');
     this.myAccountMenu = page.getByAltText('My account');
     this.logoutButton = page.getByRole('button', { name: /Odhlásit|Log out/i });
+    this.errorMessage = page.locator('div.error.ol-signup-form__info-box');
   }
 
   async gotoLogin() {
@@ -35,5 +37,9 @@ export class LoginPage {
 
   getLoginLinkLocator(): Locator {
     return this.loginLink;
+  }
+
+  getErrorMessageLocator(): Locator {
+    return this.errorMessage;
   }
 }

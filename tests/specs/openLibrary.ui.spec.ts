@@ -32,6 +32,21 @@ test('@search Search books by author - results have title and author', async ({ 
   expect(totalValidated).toBeGreaterThan(0);
 });
 
+test('@search Search for a non-existent book', async ({ page }) => {
+  const homePage = new HomePage(page);
+  const resultsPage = new SearchResultsPage(page);
+  const randomQuery = Math.random().toString(36).substring(2, 12);
+
+  await homePage.goto();
+  await homePage.search('q', randomQuery);
+
+  const noResultsLocator = resultsPage.getNoResultsLocator();
+  await expect(noResultsLocator).toBeVisible();
+  await expect(noResultsLocator).toContainText(
+    `No books directly matched your search.`
+  );
+});
+
 test('@auth Login and Logout', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -49,4 +64,20 @@ test('@auth Login and Logout', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Welcome to Open Library' })).toBeVisible();
   await loginPage.logout();
   await expect(loginPage.getLoginLinkLocator()).toBeVisible();
+});
+
+test('@auth Invalid Login', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+
+  await homePage.goto();
+  await loginPage.gotoLogin();
+
+  await loginPage.login('invalid@email.com', 'invalidpassword');
+
+  const errorMessageLocator = loginPage.getErrorMessageLocator();
+  await expect(errorMessageLocator).toBeVisible();
+  await expect(errorMessageLocator).toContainText(
+    'No account was found with this email. Please try again'
+  );
 });

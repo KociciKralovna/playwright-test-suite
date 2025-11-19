@@ -1,42 +1,40 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 export class SearchResultsPage {
-  private results: Locator;
-  private nextLink: Locator;
+  private readonly resultCards: Locator;
+  private readonly nextButton: Locator;
+  private readonly noResults: Locator;
 
   constructor(private readonly page: Page) {
-    this.results = page.locator('#searchResults li.searchResultItem');
-    this.nextLink = page.locator('a.ChoosePage[data-ol-link-track*="Next"]');
+    this.resultCards = page.locator('.search-results .details');
+    this.nextButton = page.locator('a.Next');
+    this.noResults = page.locator('div.red');
   }
 
-  async waitReady() {
-    await this.results.first().waitFor();
+  async validateCardsOnPage(authorKey: string) {
+    await expect(async () => {
+      const cards = await this.resultCards.all();
+      expect(cards.length).toBeGreaterThan(0); 
+      for (const card of cards) {
+        await expect(card.locator('.book-title-link')).toBeVisible();
+        await expect(card.locator(`a[href*="${authorKey}"]`)).toBeVisible();
+      }
+    }).toPass();
   }
 
   async getResultsCount(): Promise<number> {
-    return await this.results.count();
-  }
-
-  async validateCardsOnPage(olidKey: string) {
-    await expect(this.results.first()).toBeVisible();
-    const cards = await this.results.all();
-
-    for (const card of cards) {
-      const title = card.locator('h3.booktitle');
-      await expect(title).not.toBeEmpty();
-
-      const authorLink = card.locator(`.bookauthor a[href^="${olidKey}"]`);
-      const count = await authorLink.count();
-      expect(count).toBeGreaterThan(0);
-    }
+    return this.resultCards.count();
   }
 
   async goNextIfPossible(): Promise<boolean> {
-    if (await this.nextLink.count() === 0) return false;
-    await Promise.all([
-      this.page.waitForLoadState('domcontentloaded'),
-      this.nextLink.first().click(),
-    ]);
-    return true;
+    if (await this.nextButton.isVisible()) {
+      await this.nextButton.click();
+      return true;
+    }
+    return false;
+  }
+
+  getNoResultsLocator(): Locator {
+    return this.noResults;
   }
 }
